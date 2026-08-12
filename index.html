@@ -1,89 +1,131 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5" />
     <title>Laboratorio de Microeconomía: Movimientos vs Desplazamientos</title>
     <style>
+        /* ----- Reset y variables ----- */
         :root {
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
             --text-color: #1e293b;
             --primary: #2563eb;
-            --demand-color: #1d4ed8; /* Tono azulado institucional ideal para la curva */
+            --demand-color: #1d4ed8;
             --point-color: #10b981;
             --border: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --font-base: 1rem;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            line-height: 1.4;
-            margin: 0;
-            padding: 20px;
+            line-height: 1.5;
+            padding: 0.75rem;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
         }
 
+        /* ----- Header ----- */
         header {
             text-align: center;
-            margin-bottom: 20px;
+            padding: 0.5rem 0 0.25rem;
+        }
+        header h1 {
+            font-size: 1.8rem;
+            color: #1e3a8a;
+            margin-bottom: 0.2rem;
+            letter-spacing: -0.5px;
+        }
+        header p {
+            font-size: 1rem;
+            color: #64748b;
         }
 
-        h1 { margin: 0 0 5px 0; color: #1e3a8a; font-size: 1.8rem; }
-        header p { margin: 0; color: #64748b; }
-
+        /* ----- Layout principal (grid) ----- */
         .layout {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 20px;
+            gap: 1.25rem;
         }
 
+        /* En tablets y desktop: dos columnas */
         @media (min-width: 768px) {
-            .layout { grid-template-columns: 540px 1fr; }
+            .layout {
+                grid-template-columns: 1fr 1fr;
+                align-items: start;
+            }
         }
 
+        /* En pantallas muy grandes, fijamos un ancho máximo para el gráfico */
+        @media (min-width: 1200px) {
+            .layout {
+                grid-template-columns: 540px 1fr;
+            }
+        }
+
+        /* ----- Tarjetas ----- */
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            box-shadow: var(--shadow);
             box-sizing: border-box;
         }
 
+        /* Contenedor del canvas: centrado y con relación de aspecto */
         .canvas-container {
             display: flex;
             justify-content: center;
             align-items: center;
             background: #ffffff;
-            width: 500px;
-            height: 490px;
+            padding: 0.5rem;
+            width: 100%;
+            min-height: 300px;
         }
 
         canvas {
-            width: 460px;
-            height: 410px;
+            width: 100%;
+            height: auto;
+            max-width: 460px;
+            aspect-ratio: 460 / 410;
+            display: block;
+            background: white;
+            border-radius: 4px;
         }
 
+        /* ----- Títulos de sección ----- */
         .section-title {
             font-size: 0.95rem;
             font-weight: 700;
             color: #1e3a8a;
-            margin: 0 0 12px 0;
+            margin: 0 0 0.75rem 0;
             padding-bottom: 4px;
             border-bottom: 2px solid var(--border);
         }
 
+        /* ----- Grupos de control ----- */
         .control-group {
             background: #f8fafc;
-            padding: 12px;
+            padding: 0.75rem 1rem;
             border-radius: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 0.75rem;
             border: 1px solid var(--border);
         }
 
@@ -92,258 +134,477 @@
             justify-content: space-between;
             font-weight: 600;
             font-size: 0.85rem;
-            margin-bottom: 6px;
+            margin-bottom: 0.25rem;
+            flex-wrap: wrap;
+            gap: 0.25rem;
         }
 
         .control-label span.val {
             color: var(--primary);
             font-weight: 700;
+            background: #e0edff;
+            padding: 0.1rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
         }
 
         input[type="range"] {
             width: 100%;
-            margin: 0;
+            margin: 0.25rem 0 0 0;
             cursor: pointer;
+            height: 6px;
+            border-radius: 4px;
+            background: #d1d5db;
+            appearance: none;
+            -webkit-appearance: none;
+            transition: background 0.2s;
         }
 
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        input[type="range"]:focus {
+            outline: none;
+        }
+
+        /* ----- Caja del asistente (lección) ----- */
         .assistant-box {
             background: #f0fdf4;
             border-left: 4px solid #16a34a;
-            padding: 12px;
+            padding: 0.75rem 1rem;
             border-radius: 0 8px 8px 0;
-            margin-top: 12px;
-            height: 95px;
+            margin-top: 0.75rem;
+            min-height: 80px;
             box-sizing: border-box;
-            overflow: hidden;
+            transition: min-height 0.2s;
         }
 
         .assistant-box h4 {
-            margin: 0 0 4px 0;
+            margin: 0 0 0.25rem 0;
             color: #14532d;
             font-size: 0.9rem;
         }
 
         .assistant-box p {
             margin: 0;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: #166534;
+            line-height: 1.5;
         }
 
+        /* ----- Botón reset ----- */
         .btn-reset {
             width: 100%;
             background: #64748b;
             color: white;
             border: none;
-            padding: 10px;
+            padding: 0.75rem;
             border-radius: 6px;
             font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            margin-top: 12px;
-            transition: background 0.2s;
+            margin-top: 0.75rem;
+            transition: background 0.2s, transform 0.1s;
+            min-height: 48px;
         }
-        .btn-reset:hover { background: #475569; }
+
+        .btn-reset:hover {
+            background: #475569;
+        }
+
+        .btn-reset:active {
+            transform: scale(0.98);
+        }
+
+        /* ============================================
+           MEDIA QUERIES - RESPONSIVE
+           ============================================ */
+
+        /* Móviles muy pequeños (< 480px) */
+        @media (max-width: 480px) {
+            body {
+                padding: 0.5rem;
+            }
+            .container {
+                gap: 0.75rem;
+            }
+            header h1 {
+                font-size: 1.4rem;
+            }
+            header p {
+                font-size: 0.85rem;
+            }
+            .card {
+                padding: 0.75rem;
+            }
+            .canvas-container {
+                min-height: 200px;
+                padding: 0.25rem;
+            }
+            canvas {
+                max-width: 100%;
+            }
+            .section-title {
+                font-size: 0.85rem;
+            }
+            .control-group {
+                padding: 0.5rem 0.75rem;
+            }
+            .control-label {
+                font-size: 0.8rem;
+            }
+            .control-label span.val {
+                font-size: 0.75rem;
+                padding: 0.05rem 0.5rem;
+            }
+            input[type="range"] {
+                height: 8px;
+            }
+            input[type="range"]::-webkit-slider-thumb {
+                width: 22px;
+                height: 22px;
+            }
+            input[type="range"]::-moz-range-thumb {
+                width: 22px;
+                height: 22px;
+            }
+            .assistant-box {
+                padding: 0.5rem 0.75rem;
+                min-height: 70px;
+            }
+            .assistant-box h4 {
+                font-size: 0.8rem;
+            }
+            .assistant-box p {
+                font-size: 0.8rem;
+            }
+            .btn-reset {
+                font-size: 0.9rem;
+                padding: 0.65rem;
+                min-height: 44px;
+            }
+        }
+
+        /* Móviles / tablets pequeñas (481px - 768px) */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .container {
+                gap: 1rem;
+            }
+            header h1 {
+                font-size: 1.6rem;
+            }
+            .card {
+                padding: 1rem;
+            }
+            .canvas-container {
+                min-height: 250px;
+            }
+            canvas {
+                max-width: 420px;
+            }
+            .control-group {
+                padding: 0.65rem 0.9rem;
+            }
+            .assistant-box {
+                min-height: 75px;
+            }
+            .btn-reset {
+                min-height: 46px;
+            }
+        }
+
+        /* Pantallas medianas (769px - 1024px) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .layout {
+                grid-template-columns: 1fr 1fr;
+                gap: 1.25rem;
+            }
+            .card {
+                padding: 1.25rem;
+            }
+            .canvas-container {
+                min-height: 300px;
+            }
+            canvas {
+                max-width: 440px;
+            }
+        }
+
+        /* Pantallas grandes (> 1024px) - ya se ve bien, solo ajustamos márgenes */
+        @media (min-width: 1025px) {
+            .container {
+                max-width: 1100px;
+            }
+            .layout {
+                grid-template-columns: 540px 1fr;
+            }
+        }
+
+        /* Ajuste de accesibilidad: focus visible */
+        button:focus-visible,
+        input:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        /* Mejora para lectores de pantalla */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>Laboratorio de Microeconomía</h1>
-        <p>Diferencia entre Cambios en la Cantidad Demandada y Cambios en la Demanda</p>
-    </header>
+    <div class="container">
+        <header>
+            <h1>Laboratorio de Microeconomía</h1>
+            <p>Diferencia entre Cambios en la Cantidad Demandada y Cambios en la Demanda</p>
+        </header>
 
-    <div class="layout">
-        <!-- COLUMNA IZQUIERDA: GRÁFICO CON CURVA AZUL -->
-        <div class="card canvas-container">
-            <canvas id="marketChart" width="460" height="410"></canvas>
-        </div>
+        <div class="layout">
+            <!-- COLUMNA IZQUIERDA: GRÁFICO -->
+            <div class="card canvas-container">
+                <canvas id="marketChart" width="460" height="410"></canvas>
+            </div>
 
-        <!-- COLUMNA DERECHA: CONTROLES Y ASISTENTE -->
-        <div class="card">
-            <div class="section-title">1. Modificar Precio (Factor Endógeno)</div>
-            <div class="control-group" style="border-left: 4px solid var(--point-color);">
-                <div class="control-label">
-                    <label for="sliderPrecio">Precio del Bien ($ P):</label>
-                    <span class="val" id="valPrecio">50</span>
+            <!-- COLUMNA DERECHA: CONTROLES Y ASISTENTE -->
+            <div class="card">
+                <div class="section-title">1. Modificar Precio (Factor Endógeno)</div>
+                <div class="control-group" style="border-left: 4px solid var(--point-color);">
+                    <div class="control-label">
+                        <label for="sliderPrecio">Precio del Bien ($ P):</label>
+                        <span class="val" id="valPrecio">50</span>
+                    </div>
+                    <input type="range" id="sliderPrecio" min="10" max="90" value="50" aria-describedby="precioHelp" />
+                    <span id="precioHelp" class="sr-only">Desliza para cambiar el precio. El punto se moverá a lo largo de la curva de demanda.</span>
                 </div>
-                <input type="range" id="sliderPrecio" min="10" max="90" value="50">
-            </div>
 
-            <div class="section-title">2. Modificar Determinantes (Factores Exógenos)</div>
-            <div class="control-group" style="border-left: 4px solid var(--primary);">
-                <div class="control-label">
-                    <label for="sliderIngreso">Nivel de Ingreso de la Población:</label>
-                    <span class="val" id="valIngreso">Normal</span>
+                <div class="section-title">2. Modificar Determinantes (Factores Exógenos)</div>
+                <div class="control-group" style="border-left: 4px solid var(--primary);">
+                    <div class="control-label">
+                        <label for="sliderIngreso">Nivel de Ingreso de la Población:</label>
+                        <span class="val" id="valIngreso">Normal</span>
+                    </div>
+                    <input type="range" id="sliderIngreso" min="-20" max="20" value="0" step="10" aria-describedby="ingresoHelp" />
+                    <span id="ingresoHelp" class="sr-only">Desliza para cambiar el ingreso. La curva de demanda se desplazará.</span>
                 </div>
-                <input type="range" id="sliderIngreso" min="-20" max="20" value="0" step="10">
-            </div>
 
-            <div class="control-group" style="border-left: 4px solid var(--primary);">
-                <div class="control-label">
-                    <label for="sliderPreferencias">Gustos y Preferencias por el Bien:</label>
-                    <span class="val" id="valPreferencias">Neutrales</span>
+                <div class="control-group" style="border-left: 4px solid var(--primary);">
+                    <div class="control-label">
+                        <label for="sliderPreferencias">Gustos y Preferencias por el Bien:</label>
+                        <span class="val" id="valPreferencias">Neutrales</span>
+                    </div>
+                    <input type="range" id="sliderPreferencias" min="-20" max="20" value="0" step="10" aria-describedby="preferenciasHelp" />
+                    <span id="preferenciasHelp" class="sr-only">Desliza para cambiar las preferencias. La curva de demanda se desplazará.</span>
                 </div>
-                <input type="range" id="sliderPreferencias" min="-20" max="20" value="0" step="10">
-            </div>
 
-            <div class="assistant-box">
-                <h4>💡 Lección en tiempo real:</h4>
-                <p id="textoAsistente">Mueve el Precio para ver un cambio en la cantidad demandada, o altera el Ingreso y los Gustos para ver un cambio en la demanda.</p>
-            </div>
+                <div class="assistant-box">
+                    <h4>💡 Lección en tiempo real:</h4>
+                    <p id="textoAsistente">Mueve el Precio para ver un cambio en la cantidad demandada, o altera el Ingreso y los Gustos para ver un cambio en la demanda.</p>
+                </div>
 
-            <button class="btn-reset" id="btnReset">Restablecer Mercado Base</button>
+                <button class="btn-reset" id="btnReset">Restablecer Mercado Base</button>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    const canvas = document.getElementById('marketChart');
-    const ctx = canvas.getContext('2d');
+    <script>
+        // ----- Obtener referencias -----
+        const canvas = document.getElementById('marketChart');
+        const ctx = canvas.getContext('2d');
 
-    const sliderPrecio = document.getElementById('sliderPrecio');
-    const sliderIngreso = document.getElementById('sliderIngreso');
-    const sliderPreferencias = document.getElementById('sliderPreferencias');
-    const valPrecio = document.getElementById('valPrecio');
-    const valIngreso = document.getElementById('valIngreso');
-    const valPreferencias = document.getElementById('valPreferencias');
-    const textoAsistente = document.getElementById('textoAsistente');
-    const btnReset = document.getElementById('btnReset');
+        const sliderPrecio = document.getElementById('sliderPrecio');
+        const sliderIngreso = document.getElementById('sliderIngreso');
+        const sliderPreferencias = document.getElementById('sliderPreferencias');
+        const valPrecio = document.getElementById('valPrecio');
+        const valIngreso = document.getElementById('valIngreso');
+        const valPreferencias = document.getElementById('valPreferencias');
+        const textoAsistente = document.getElementById('textoAsistente');
+        const btnReset = document.getElementById('btnReset');
 
-    let aBase = 100; 
-    let b = 1;
+        // ----- Parámetros de la demanda -----
+        let aBase = 100;
+        let b = 1;
 
-    function obtenerTextoTextoExogeno(valor) {
-        if (valor > 0) return "Incremento (+)";
-        if (valor < 0) return "Reducción (-)";
-        return "Estable / Normal";
-    }
-
-    function dibujarGrafico() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        let P_actual = parseFloat(sliderPrecio.value);
-        let modIngreso = parseFloat(sliderIngreso.value);
-        let modPreferencias = parseFloat(sliderPreferencias.value);
-
-        let a_actual = aBase + modIngreso + modPreferencias;
-        let Q_actual = a_actual - (b * P_actual);
-        if(Q_actual < 0) Q_actual = 0;
-
-        const margin = { top: 40, right: 30, bottom: 45, left: 65 };
-        const graphWidth = canvas.width - margin.left - margin.right;
-        const graphHeight = canvas.height - margin.top - margin.bottom;
-
-        function getXPixel(qVal) { return margin.left + (qVal / 120) * graphWidth; }
-        function getYPixel(pVal) { return margin.top + graphHeight - (pVal / 100) * graphHeight; }
-
-        // Ejes
-        ctx.strokeStyle = '#64748b';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(margin.left, margin.top);
-        ctx.lineTo(margin.left, canvas.height - margin.bottom);
-        ctx.lineTo(canvas.width - margin.right, canvas.height - margin.bottom);
-        ctx.stroke();
-
-        ctx.fillStyle = '#1e293b';
-        ctx.font = 'bold 14px sans-serif';
-        ctx.fillText('Precio (P)', margin.left - 25, margin.top - 15);
-        ctx.fillText('Cantidad (Q)', canvas.width - margin.right - 45, canvas.height - margin.bottom + 35);
-
-        // Curva D (Azulada)
-        let pStart = 100;
-        let qStart = a_actual - (b * pStart);
-        if(qStart < 0) { qStart = 0; pStart = a_actual / b; }
-
-        let pEnd = 0;
-        let qEnd = a_actual;
-
-        ctx.strokeStyle = 'var(--demand-color)';
-        ctx.lineWidth = 4;
-        ctx.beginPath();
-        ctx.moveTo(getXPixel(qStart), getYPixel(pStart));
-        ctx.lineTo(getXPixel(qEnd), getYPixel(pEnd));
-        ctx.stroke();
-
-        ctx.fillStyle = 'var(--demand-color)';
-        ctx.font = 'italic bold 14px sans-serif';
-        ctx.fillText('Demanda (D)', getXPixel(qEnd) - 80, getYPixel(pEnd) - 12);
-
-        // Proyecciones
-        let xPt = getXPixel(Q_actual);
-        let yPt = getYPixel(P_actual);
-
-        ctx.strokeStyle = '#94a3b8';
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([4, 4]);
-        
-        ctx.beginPath();
-        ctx.moveTo(xPt, yPt);
-        ctx.lineTo(margin.left, yPt);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(xPt, yPt);
-        ctx.lineTo(xPt, canvas.height - margin.bottom);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        // Punto de equilibrio
-        ctx.fillStyle = 'var(--point-color)';
-        ctx.beginPath();
-        ctx.arc(xPt, yPt, 6, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        // Valores numéricos en los ejes
-        ctx.fillStyle = '#1e293b';
-        ctx.font = 'bold 15px sans-serif';
-        ctx.textAlign = 'right';
-        ctx.fillText('$' + P_actual, margin.left - 10, yPt + 5);
-        
-        ctx.textAlign = 'center';
-        ctx.fillText(Math.round(Q_actual) + ' u', xPt, canvas.height - margin.bottom + 22);
-    }
-
-    function actualizarLaboratorio(origen) {
-        let pVal = sliderPrecio.value;
-        let ingVal = parseFloat(sliderIngreso.value);
-        let prefVal = parseFloat(sliderPreferencias.value);
-
-        valPrecio.innerText = pVal;
-        valIngreso.innerText = obtenerTextoTextoExogeno(ingVal);
-        valPreferencias.innerText = obtenerTextoTextoExogeno(prefVal);
-
-        if (origen === 'precio') {
-            textoAsistente.innerHTML = `<strong>Cambio en la Cantidad Demandada:</strong> Estás alterando el precio del propio bien. La estructura de la curva no cambia; el punto verde solo se mueve <strong>a lo largo de la misma recta</strong>.`;
-        } else if (origen === 'exogeno') {
-            if (ingVal === 0 && prefVal === 0) {
-                textoAsistente.innerHTML = `El mercado regresó a su equilibrio base. Las condiciones externas son estables y la curva ha vuelto a su posición de referencia inicial.`;
-            } else {
-                let dir = (ingVal + prefVal > 0) ? "derecha (expansión)" : "izquierda (contracción)";
-                textoAsistente.innerHTML = `<strong>Cambio en la Demanda:</strong> Modificaste un factor externo al precio. El precio se mantiene fijo, pero <strong>toda la curva de demanda se desplaza hacia la ${dir}</strong>.`;
-            }
+        // ----- Función auxiliar para etiquetas de factores exógenos -----
+        function obtenerTextoExogeno(valor) {
+            if (valor > 0) return "Incremento (+)";
+            if (valor < 0) return "Reducción (-)";
+            return "Estable / Normal";
         }
 
-        dibujarGrafico();
-    }
+        // ----- Función principal de dibujo -----
+        function dibujarGrafico() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    sliderPrecio.addEventListener('input', () => actualizarLaboratorio('precio'));
-    sliderIngreso.addEventListener('input', () => actualizarLaboratorio('exogeno'));
-    sliderPreferencias.addEventListener('input', () => actualizarLaboratorio('exogeno'));
+            const P_actual = parseFloat(sliderPrecio.value);
+            const modIngreso = parseFloat(sliderIngreso.value);
+            const modPreferencias = parseFloat(sliderPreferencias.value);
 
-    btnReset.addEventListener('click', () => {
-        sliderPrecio.value = 50;
-        sliderIngreso.value = 0;
-        sliderPreferencias.value = 0;
-        textoAsistente.innerHTML = `El mercado se ha restablecido. Pon a prueba a tus alumnos: pídeles que suban el precio y expliquen por qué la función de demanda se mantiene inmóvil.`;
+            // Calcular la nueva curva (desplazamiento)
+            const a_actual = aBase + modIngreso + modPreferencias;
+            let Q_actual = a_actual - (b * P_actual);
+            if (Q_actual < 0) Q_actual = 0;
+
+            // Márgenes y dimensiones del gráfico
+            const margin = { top: 40, right: 30, bottom: 45, left: 65 };
+            const graphWidth = canvas.width - margin.left - margin.right;
+            const graphHeight = canvas.height - margin.top - margin.bottom;
+
+            // Funciones de mapeo
+            function getXPixel(qVal) {
+                return margin.left + (qVal / 120) * graphWidth;
+            }
+            function getYPixel(pVal) {
+                return margin.top + graphHeight - (pVal / 100) * graphHeight;
+            }
+
+            // ----- Dibujar ejes -----
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(margin.left, margin.top);
+            ctx.lineTo(margin.left, canvas.height - margin.bottom);
+            ctx.lineTo(canvas.width - margin.right, canvas.height - margin.bottom);
+            ctx.stroke();
+
+            ctx.fillStyle = '#1e293b';
+            ctx.font = 'bold 14px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Precio (P)', margin.left - 25, margin.top - 15);
+            ctx.fillText('Cantidad (Q)', canvas.width - margin.right - 45, canvas.height - margin.bottom + 35);
+
+            // ----- Dibujar curva de demanda (azul) -----
+            let pStart = 100;
+            let qStart = a_actual - (b * pStart);
+            if (qStart < 0) { qStart = 0; pStart = a_actual / b; }
+
+            let pEnd = 0;
+            let qEnd = a_actual;
+
+            ctx.strokeStyle = 'var(--demand-color)';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(getXPixel(qStart), getYPixel(pStart));
+            ctx.lineTo(getXPixel(qEnd), getYPixel(pEnd));
+            ctx.stroke();
+
+            ctx.fillStyle = 'var(--demand-color)';
+            ctx.font = 'italic bold 14px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText('Demanda (D)', getXPixel(qEnd) - 80, getYPixel(pEnd) - 12);
+
+            // ----- Proyecciones (líneas punteadas) -----
+            const xPt = getXPixel(Q_actual);
+            const yPt = getYPixel(P_actual);
+
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 4]);
+
+            // Línea horizontal desde el punto hasta el eje Y
+            ctx.beginPath();
+            ctx.moveTo(xPt, yPt);
+            ctx.lineTo(margin.left, yPt);
+            ctx.stroke();
+
+            // Línea vertical desde el punto hasta el eje X
+            ctx.beginPath();
+            ctx.moveTo(xPt, yPt);
+            ctx.lineTo(xPt, canvas.height - margin.bottom);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // ----- Punto de equilibrio (verde) -----
+            ctx.fillStyle = 'var(--point-color)';
+            ctx.beginPath();
+            ctx.arc(xPt, yPt, 6, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // ----- Etiquetas de valores en ejes -----
+            ctx.fillStyle = '#1e293b';
+            ctx.font = 'bold 15px sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText('$' + P_actual, margin.left - 10, yPt + 5);
+
+            ctx.textAlign = 'center';
+            ctx.fillText(Math.round(Q_actual) + ' u', xPt, canvas.height - margin.bottom + 22);
+        }
+
+        // ----- Función que actualiza toda la interfaz -----
+        function actualizarLaboratorio(origen) {
+            const pVal = sliderPrecio.value;
+            const ingVal = parseFloat(sliderIngreso.value);
+            const prefVal = parseFloat(sliderPreferencias.value);
+
+            // Actualizar etiquetas de los sliders
+            valPrecio.innerText = pVal;
+            valIngreso.innerText = obtenerTextoExogeno(ingVal);
+            valPreferencias.innerText = obtenerTextoExogeno(prefVal);
+
+            // Mensaje del asistente según el origen del cambio
+            if (origen === 'precio') {
+                textoAsistente.innerHTML = `<strong>Cambio en la Cantidad Demandada:</strong> Estás alterando el precio del propio bien. La estructura de la curva no cambia; el punto verde solo se mueve <strong>a lo largo de la misma recta</strong>.`;
+            } else if (origen === 'exogeno') {
+                if (ingVal === 0 && prefVal === 0) {
+                    textoAsistente.innerHTML = `El mercado regresó a su equilibrio base. Las condiciones externas son estables y la curva ha vuelto a su posición de referencia inicial.`;
+                } else {
+                    const dir = (ingVal + prefVal > 0) ? "derecha (expansión)" : "izquierda (contracción)";
+                    textoAsistente.innerHTML = `<strong>Cambio en la Demanda:</strong> Modificaste un factor externo al precio. El precio se mantiene fijo, pero <strong>toda la curva de demanda se desplaza hacia la ${dir}</strong>.`;
+                }
+            } else {
+                // Origen 'base' (reset)
+                textoAsistente.innerHTML = `El mercado se ha restablecido. Pon a prueba a tus alumnos: pídeles que suban el precio y expliquen por qué la función de demanda se mantiene inmóvil.`;
+            }
+
+            // Redibujar el gráfico
+            dibujarGrafico();
+        }
+
+        // ----- Event listeners -----
+        sliderPrecio.addEventListener('input', () => actualizarLaboratorio('precio'));
+        sliderIngreso.addEventListener('input', () => actualizarLaboratorio('exogeno'));
+        sliderPreferencias.addEventListener('input', () => actualizarLaboratorio('exogeno'));
+
+        btnReset.addEventListener('click', () => {
+            sliderPrecio.value = 50;
+            sliderIngreso.value = 0;
+            sliderPreferencias.value = 0;
+            actualizarLaboratorio('base');
+        });
+
+        // ----- Inicialización -----
         actualizarLaboratorio('base');
-    });
-
-    actualizarLaboratorio('base');
-</script>
+    </script>
 
 </body>
 </html>
