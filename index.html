@@ -47,13 +47,13 @@
             padding: 0.5rem 0 0.25rem;
         }
         header h1 {
-            font-size: 1.8rem;
+            font-size: clamp(1.4rem, 4vw, 1.8rem);
             color: #1e3a8a;
             margin-bottom: 0.2rem;
             letter-spacing: -0.5px;
         }
         header p {
-            font-size: 1rem;
+            font-size: clamp(0.85rem, 2vw, 1rem);
             color: #64748b;
         }
 
@@ -64,7 +64,6 @@
             gap: 1.25rem;
         }
 
-        /* En tablets y desktop: dos columnas */
         @media (min-width: 768px) {
             .layout {
                 grid-template-columns: 1fr 1fr;
@@ -72,7 +71,6 @@
             }
         }
 
-        /* En pantallas muy grandes, fijamos un ancho máximo para el gráfico */
         @media (min-width: 1200px) {
             .layout {
                 grid-template-columns: 540px 1fr;
@@ -84,7 +82,7 @@
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 1.25rem;
+            padding: clamp(0.75rem, 2vw, 1.25rem);
             box-shadow: var(--shadow);
             box-sizing: border-box;
         }
@@ -97,7 +95,7 @@
             background: #ffffff;
             padding: 0.5rem;
             width: 100%;
-            min-height: 300px;
+            min-height: 250px;
         }
 
         canvas {
@@ -108,11 +106,12 @@
             display: block;
             background: white;
             border-radius: 4px;
+            border: 1px solid var(--border);
         }
 
         /* ----- Títulos de sección ----- */
         .section-title {
-            font-size: 0.95rem;
+            font-size: clamp(0.85rem, 1.5vw, 0.95rem);
             font-weight: 700;
             color: #1e3a8a;
             margin: 0 0 0.75rem 0;
@@ -123,7 +122,7 @@
         /* ----- Grupos de control ----- */
         .control-group {
             background: #f8fafc;
-            padding: 0.75rem 1rem;
+            padding: clamp(0.5rem, 1.2vw, 0.75rem) clamp(0.75rem, 1.5vw, 1rem);
             border-radius: 8px;
             margin-bottom: 0.75rem;
             border: 1px solid var(--border);
@@ -133,7 +132,7 @@
             display: flex;
             justify-content: space-between;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: clamp(0.75rem, 1.2vw, 0.85rem);
             margin-bottom: 0.25rem;
             flex-wrap: wrap;
             gap: 0.25rem;
@@ -145,7 +144,7 @@
             background: #e0edff;
             padding: 0.1rem 0.6rem;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: clamp(0.7rem, 1vw, 0.8rem);
         }
 
         input[type="range"] {
@@ -163,8 +162,8 @@
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 18px;
-            height: 18px;
+            width: clamp(18px, 3vw, 22px);
+            height: clamp(18px, 3vw, 22px);
             border-radius: 50%;
             background: var(--primary);
             cursor: pointer;
@@ -173,8 +172,8 @@
         }
 
         input[type="range"]::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
+            width: clamp(18px, 3vw, 22px);
+            height: clamp(18px, 3vw, 22px);
             border-radius: 50%;
             background: var(--primary);
             cursor: pointer;
@@ -190,10 +189,10 @@
         .assistant-box {
             background: #f0fdf4;
             border-left: 4px solid #16a34a;
-            padding: 0.75rem 1rem;
+            padding: clamp(0.5rem, 1.2vw, 0.75rem) clamp(0.75rem, 1.5vw, 1rem);
             border-radius: 0 8px 8px 0;
             margin-top: 0.75rem;
-            min-height: 80px;
+            min-height: 70px;
             box-sizing: border-box;
             transition: min-height 0.2s;
         }
@@ -201,12 +200,12 @@
         .assistant-box h4 {
             margin: 0 0 0.25rem 0;
             color: #14532d;
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 1.2vw, 0.9rem);
         }
 
         .assistant-box p {
             margin: 0;
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 1.2vw, 0.9rem);
             color: #166534;
             line-height: 1.5;
         }
@@ -217,14 +216,14 @@
             background: #64748b;
             color: white;
             border: none;
-            padding: 0.75rem;
+            padding: clamp(0.6rem, 1.2vw, 0.75rem);
             border-radius: 6px;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 1.2vw, 1rem);
             cursor: pointer;
             margin-top: 0.75rem;
             transition: background 0.2s, transform 0.1s;
-            min-height: 48px;
+            min-height: 44px;
         }
 
         .btn-reset:hover {
@@ -247,60 +246,32 @@
             .container {
                 gap: 0.75rem;
             }
-            header h1 {
-                font-size: 1.4rem;
-            }
-            header p {
-                font-size: 0.85rem;
-            }
-            .card {
-                padding: 0.75rem;
-            }
             .canvas-container {
                 min-height: 200px;
                 padding: 0.25rem;
             }
-            canvas {
-                max-width: 100%;
-            }
-            .section-title {
-                font-size: 0.85rem;
+            .card {
+                padding: 0.75rem;
             }
             .control-group {
                 padding: 0.5rem 0.75rem;
-            }
-            .control-label {
-                font-size: 0.8rem;
-            }
-            .control-label span.val {
-                font-size: 0.75rem;
-                padding: 0.05rem 0.5rem;
             }
             input[type="range"] {
                 height: 8px;
             }
             input[type="range"]::-webkit-slider-thumb {
-                width: 22px;
-                height: 22px;
+                width: 24px;
+                height: 24px;
             }
             input[type="range"]::-moz-range-thumb {
-                width: 22px;
-                height: 22px;
+                width: 24px;
+                height: 24px;
             }
             .assistant-box {
-                padding: 0.5rem 0.75rem;
-                min-height: 70px;
-            }
-            .assistant-box h4 {
-                font-size: 0.8rem;
-            }
-            .assistant-box p {
-                font-size: 0.8rem;
+                min-height: 60px;
             }
             .btn-reset {
-                font-size: 0.9rem;
-                padding: 0.65rem;
-                min-height: 44px;
+                min-height: 40px;
             }
         }
 
@@ -309,64 +280,25 @@
             .container {
                 gap: 1rem;
             }
-            header h1 {
-                font-size: 1.6rem;
-            }
-            .card {
-                padding: 1rem;
-            }
             .canvas-container {
-                min-height: 250px;
-            }
-            canvas {
-                max-width: 420px;
-            }
-            .control-group {
-                padding: 0.65rem 0.9rem;
-            }
-            .assistant-box {
-                min-height: 75px;
-            }
-            .btn-reset {
-                min-height: 46px;
+                min-height: 240px;
             }
         }
 
         /* Pantallas medianas (769px - 1024px) */
         @media (min-width: 769px) and (max-width: 1024px) {
-            .layout {
-                grid-template-columns: 1fr 1fr;
-                gap: 1.25rem;
-            }
-            .card {
-                padding: 1.25rem;
-            }
             .canvas-container {
-                min-height: 300px;
-            }
-            canvas {
-                max-width: 440px;
+                min-height: 280px;
             }
         }
 
-        /* Pantallas grandes (> 1024px) - ya se ve bien, solo ajustamos márgenes */
-        @media (min-width: 1025px) {
-            .container {
-                max-width: 1100px;
-            }
-            .layout {
-                grid-template-columns: 540px 1fr;
-            }
-        }
-
-        /* Ajuste de accesibilidad: focus visible */
+        /* Accesibilidad */
         button:focus-visible,
         input:focus-visible {
             outline: 2px solid var(--primary);
             outline-offset: 2px;
         }
 
-        /* Mejora para lectores de pantalla */
         .sr-only {
             position: absolute;
             width: 1px;
@@ -541,14 +473,24 @@
             ctx.stroke();
             ctx.setLineDash([]);
 
-            // ----- Punto de equilibrio (verde) -----
-            ctx.fillStyle = 'var(--point-color)';
+            // ----- Punto de equilibrio (VERDE, más grande y con contraste) -----
+            ctx.shadowColor = 'rgba(0,0,0,0.2)';
+            ctx.shadowBlur = 6;
+            ctx.fillStyle = '#059669'; // verde más intenso
             ctx.beginPath();
-            ctx.arc(xPt, yPt, 6, 0, 2 * Math.PI);
+            ctx.arc(xPt, yPt, 9, 0, 2 * Math.PI);
             ctx.fill();
+            ctx.shadowBlur = 0;
+            // Borde blanco para resaltar
             ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 2.5;
             ctx.stroke();
+
+            // Pequeño brillo interior
+            ctx.fillStyle = '#34d399';
+            ctx.beginPath();
+            ctx.arc(xPt - 2, yPt - 2, 3, 0, 2 * Math.PI);
+            ctx.fill();
 
             // ----- Etiquetas de valores en ejes -----
             ctx.fillStyle = '#1e293b';
@@ -573,17 +515,33 @@
 
             // Mensaje del asistente según el origen del cambio
             if (origen === 'precio') {
-                textoAsistente.innerHTML = `<strong>Cambio en la Cantidad Demandada:</strong> Estás alterando el precio del propio bien. La estructura de la curva no cambia; el punto verde solo se mueve <strong>a lo largo de la misma recta</strong>.`;
+                textoAsistente.innerHTML = `
+                    <strong>Cambio en la Cantidad Demandada:</strong> 
+                    Al modificar el <em>precio del bien</em>, te desplazas <strong>a lo largo de la curva</strong>. 
+                    El punto verde se mueve sobre la misma recta, reflejando un cambio en la cantidad demandada.
+                `;
             } else if (origen === 'exogeno') {
                 if (ingVal === 0 && prefVal === 0) {
-                    textoAsistente.innerHTML = `El mercado regresó a su equilibrio base. Las condiciones externas son estables y la curva ha vuelto a su posición de referencia inicial.`;
+                    textoAsistente.innerHTML = `
+                        El mercado regresó a su equilibrio base. 
+                        Las condiciones externas son estables y la curva ha vuelto a su posición de referencia inicial.
+                    `;
                 } else {
                     const dir = (ingVal + prefVal > 0) ? "derecha (expansión)" : "izquierda (contracción)";
-                    textoAsistente.innerHTML = `<strong>Cambio en la Demanda:</strong> Modificaste un factor externo al precio. El precio se mantiene fijo, pero <strong>toda la curva de demanda se desplaza hacia la ${dir}</strong>.`;
+                    textoAsistente.innerHTML = `
+                        <strong>Cambio en la Demanda:</strong> 
+                        Modificaste un factor externo al precio (ingreso o preferencias). 
+                        El precio se mantiene fijo, pero <strong>toda la curva de demanda se desplaza hacia la ${dir}</strong>.
+                        El punto verde ahora se ubica sobre la nueva curva.
+                    `;
                 }
             } else {
                 // Origen 'base' (reset)
-                textoAsistente.innerHTML = `El mercado se ha restablecido. Modifica el precio y explica por qué la función de demanda se mantiene inmóvil.`;
+                textoAsistente.innerHTML = `
+                    El mercado se ha restablecido. 
+                    Modifica el precio para observar un movimiento a lo largo de la curva, 
+                    o ajusta los factores externos para ver un desplazamiento de toda la curva.
+                `;
             }
 
             // Redibujar el gráfico
